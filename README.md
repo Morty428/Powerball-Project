@@ -36,3 +36,7 @@ For now ploting the data is a simple bar chart. In further updates we can manipu
 For the time being the data plotted is a total from the most recent Powerball drawing to 1992. Future updates will allow a date range selection to have more accurate data selection.
 
 Another planned update is automatically scaping the drawing data to update the database.
+
+## Known Issues
+
+The SQL queries are in a refinement stage.  Trying to get variable assignment in the SQL queries is taking some time and research.
