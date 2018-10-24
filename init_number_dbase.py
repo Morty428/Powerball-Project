@@ -22,7 +22,7 @@ def create_DB(): #To create a sql table
     conn.execute('''
                  CREATE TABLE if not exists Powerball
                  (
-                  DrawDate       TEXT  NOT NULL PRIMARY KEY,
+                  DrawDate       DATETIME  NOT NULL PRIMARY KEY,
                   N1             INTEGER    NOT NULL,
                   N2             INTEGER    NOT NULL,
                   N3             INTEGER    NOT NULL,
@@ -38,16 +38,16 @@ def create_DB(): #To create a sql table
     
 #Use xlrd to convert spreadsheet to sql    
 def add_Data():
-    book = xlrd.open_workbook("powerballhistory_formated.xls")
-    sheet = book.sheet_by_name("Powerball")
+    book = xlrd.open_workbook("test.xls")
+    sheet = book.sheet_by_name("test")
     conn = sqlite3.connect(DB_File)
     c = conn.cursor()
     query = '''INSERT INTO Powerball 
     (DrawDate, N1, N2, N3, N4, N5, PB, PowerPlay, Jackpot)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
-    #Use a loop to run through the spreadsheet    
-    for r in range(0, sheet.nrows):
+    #Use a loop to run through the spreadsheet use the number 1 to skip to row 2 where the data starts   
+    for r in range(1, sheet.nrows):
         DrawDate     = sheet.cell(r,0).value
         N1           = sheet.cell(r,1).value
         N2           = sheet.cell(r,2).value
@@ -74,13 +74,15 @@ def select_Date():
     conn = sqlite3.connect(DB_File)
     date_1 = input("enter in the beginning draw date, yyyy/mm/dd ")
     date_2 = input("enter in the end draw date, yyyy/mm/dd ")
-    query = '''SELECT * FROM Powerball WHERE DrawDate >= ? 
-               AND DrawDate <= ? ORDER BY DrawDate'''
-    cursor = conn.execute(query, (date_1, date_2,))
-    print("{:^13}{:^4}{:^3}{:^3}{:^3}{:^3}{:^3}{:^8}{:^20}".format(
+    #query = '''SELECT * FROM Powerball WHERE DrawDate >= ? 
+               #AND DrawDate <= ? ORDER BY DrawDate'''
+    #cursor = conn.execute(query, (date_1, date_2,))
+    query = '''SELECT * FROM Powerball'''
+    cursor = conn.execute(query)
+    print("{:^15}{:^4}{:^3}{:^3}{:^3}{:^3}{:^3}{:^8}{:^20}".format(
             "DrawDate","N1","N2","N3","N4","N5","PB","PowerPlay","Jackpot"))
     for row in cursor:
-       print("{:13}{:^4}{:^3}{:^3}{:^3}{:^3}{:^3}{:^8}{:>20}".format(
+       print("{:15}{:^4}{:^3}{:^3}{:^3}{:^3}{:^3}{:^8}{:>20}".format(
                row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8]))
     conn.close()
     
