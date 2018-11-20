@@ -38,6 +38,7 @@ book = xlrd.open_workbook("powerballhistoryformatted.xls")
 sheet = book.sheet_by_name("powerballhistory")
 
 # Query to insert sheet data used a as variable
+# The :1, :2, etc. are variables to allow the loop to add the data
 query = '''INSERT INTO Powerball 
     (DrawDate, N1, N2, N3, N4, N5, PB, PowerPlay, Jackpot)
     VALUES (to_date(:1,'MON DD, YYYY'), :2, :3, :4, :5, :6, :7, :8, :9)
@@ -61,7 +62,7 @@ for row in range(1, sheet.nrows):
 # Close the cursor element
 cur.close()
 
-# Commit the added data to the DB
+# Commit the data to the DB
 conn.commit()
 print("Data import completed")
 print()
