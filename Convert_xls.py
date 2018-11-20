@@ -2,31 +2,26 @@
 """
 Created on Tue Oct 23 18:02:00 2018
 
-@author: socce
+@author: Matthew Mortensen
 """
 
 import pandas as pd
 
-#df = pd.read_excel('powerballhistory.xls', sheet_name='powerballhistory',
- #                  index_col='Draw Date', skiprows=1)
-'''df = pd.read_excel('powerballhistory.xls', sheet_name='powerballhistory',
-                   header=None, index_col=None, skiprows=1, names=
-                   ['Draw Date', 'N1','N2','N3','N4','N5','PB',
-                    'Power Play','Jackpot']) '''
-
+# Open the speadsheet in pandas
 xl = pd.ExcelFile('powerballhistory.xls', sheet_name='powerballhistory')
-df = xl.parse(header=None, skiprows=2, names=['Draw Date', 'N1','N2','N3','N4','N5','PB',
+
+# Create a dataframe from the spreadsheet
+df = xl.parse(header=None, skiprows=2, names=
+              ['Draw Date', 'N1','N2','N3','N4','N5','PB',
                     'Power Play','Jackpot'])
+# Slice the Sat, and Wed, from the beginning of the draw date
+df['Draw Date'] = df['Draw Date'].str.slice(5,20)
+
+# Set the dataframe index to the Draw Date column
 df.set_index('Draw Date', inplace=True)
-df.index = df.index.str.slice(5,20)
-df.index = pd.to_datetime(df.index)
 
-#df['test'] = df['Draw Date'].str.slice(5,20)
-#df['test'] = pd.to_datetime(df['test'])
-#df['test'] = df['test'].astype('datetime64')
-                    
-
-
+# Print the first couple of lines from the data frame to verify the format
 print(df.head(2))
 
-df.to_excel('test.xls', sheet_name='test', )
+# Save the dataframe to a new excel file
+df.to_excel('powerballhistoryformatted.xls', sheet_name='powerballhistory', )
